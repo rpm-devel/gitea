@@ -1,0 +1,19 @@
+[Unit]
+Description=Gitea (Git with a cup of tea)
+After=syslog.target
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+User=gitea
+Group=gitea
+WorkingDirectory=/var/lib/gitea
+ExecStart=/var/lib/gitea/gitea web --config /etc/gitea/gitea.ini
+Environment=USER=gitea
+RemainAfterExit=yes
+Restart=always
+RestartSec=3
+
