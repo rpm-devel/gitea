@@ -36,13 +36,13 @@ rm -f $GOPATH/go.mod
 TAGS="bindata sqlite" make generate build
 
 %install
-mkdir -p $RPM_BUILD_ROOT/%{_sharedstatedir}/gitea
-mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/gitea
-mkdir -p $RPM_BUILD_ROOT/%{_unitdir}
-#install custom/conf/app.ini.sample $RPM_BUILD_ROOT/%{_sysconfdir}/gitea/gitea.ini
-install -m 755 ../src/code.gitea.io/gitea/gitea $RPM_BUILD_ROOT/%{_sharedstatedir}/gitea/gitea
-install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/%{_unitdir}/gitea.service
-install -m 644 %{SOURCE2} $RPM_BUILD_ROOT/%{_sysconfdir}/gitea/gitea.ini
+mkdir -p %{buildroot}/%{_sharedstatedir}/gitea
+mkdir -p %{buildroot}/%{_sysconfdir}/gitea
+mkdir -p %{buildroot}/%{_unitdir}
+#install custom/conf/app.ini.sample %{buildroot}/%{_sysconfdir}/gitea/gitea.ini
+install -m 755 ../src/code.gitea.io/gitea/gitea %{buildroot}/%{_sharedstatedir}/gitea/gitea
+install -m 644 %{SOURCE1} %{buildroot}/%{_unitdir}/gitea.service
+install -m 644 %{SOURCE2} %{buildroot}/%{_sysconfdir}/gitea/gitea.ini
 
 %files
 %doc LICENSE
@@ -61,6 +61,9 @@ getent passwd gitea > /dev/null || \
 %systemd_post gitea.service
 
 %changelog
+* Fri May 22 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.26.0-1
+- Fix spec violations: use %{buildroot}, %global for constants
+
 * Fri Apr 24 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.26.0-1
 - Update to 1.26.0
 - Modernize spec for EL10
