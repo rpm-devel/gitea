@@ -14,8 +14,14 @@ BuildRequires:	golang >= 1.21
 BuildRequires:	make
 BuildRequires:	systemd-rpm-macros
 
+%if 0%{?suse_version}
+%global shadow_pkg shadow
+%else
+%global shadow_pkg shadow-utils
+%endif
+
 Requires: git
-Requires(pre):	shadow-utils
+Requires(pre):	%{shadow_pkg}
 %{?systemd_requires}
 
 
@@ -70,6 +76,14 @@ getent passwd gitea > /dev/null || \
 %systemd_postun_with_restart gitea.service
 
 %changelog
+* Sat Jul 05 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.26.4-1
+- Multi-distro: guard Requires(pre) shadow-utils/shadow via %%{?suse_version}
+  (openSUSE/SLES use "shadow", RHEL/Fedora use "shadow-utils")
+- Verified ExclusiveArch: x86_64 aarch64 already correct, no BuildArch:
+  noarch present; no EL7-missing macros in use; no other dep name
+  divergences apply (golang, make, git, systemd-rpm-macros identical
+  across all target distros)
+
 * Sat Jul 04 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.26.4-1
 - Version: 1.26.0 → 1.26.4 (latest)
 - Source0: fix tarball name gitea-VERSION → gitea-src-VERSION (GitHub release asset); verified 302→200
