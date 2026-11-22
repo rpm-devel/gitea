@@ -1,6 +1,6 @@
 Name:           gitea
 Version:        1.26.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Gitea is a painless self-hosted Git service.
 
 License:        MIT
@@ -8,7 +8,6 @@ URL:            https://gitea.io
 Source0:        https://github.com/go-gitea/gitea/releases/download/v%{version}/%{name}-src-%{version}.tar.gz
 Source1:	    gitea.service
 Source2:        gitea.ini
-Source3:        themes
 
 BuildRequires:	golang >= 1.21
 BuildRequires:	make
@@ -76,6 +75,9 @@ getent passwd gitea > /dev/null || \
 %systemd_postun_with_restart gitea.service
 
 %changelog
+* Sat Nov 21 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.26.4-2
+- Drop the unused directory Source3 (rpm sources must be files)
+
 * Sat Jul 05 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.26.4-1
 - Multi-distro: guard Requires(pre) shadow-utils/shadow via %%{?suse_version}
   (openSUSE/SLES use "shadow", RHEL/Fedora use "shadow-utils")
